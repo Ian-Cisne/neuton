@@ -1,6 +1,6 @@
 
 
-#include "grapher.hpp"
+#include "logger.hpp"
 
 #include <cstdlib>
 #include <iostream> 
@@ -8,7 +8,8 @@
 
 
 int main() {
-
+  neu::Logger log(std::cout, "bin/log.out");
+  
   
   return EXIT_SUCCESS;
 }
