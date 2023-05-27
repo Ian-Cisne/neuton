@@ -14,6 +14,7 @@ namespace neu {
         error,
         warn,
         info,
+        success,
         debug,
         miscellaneuos
     };
@@ -27,8 +28,8 @@ namespace neu {
         
         friend Logger& operator<<(Logger&, LogLevel);
         friend Logger& operator<<(Logger&, char const*);
-        template<ConvertibleToStdString T>
-        friend Logger& operator<<(Logger&, T t);
+        friend Logger& operator<<(Logger& a , std::string const t);
+        friend Logger& operator<<(Logger& a , int const t);
     private:
         //Makes this class non-copyable
         Logger(const Logger&);

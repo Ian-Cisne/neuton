@@ -5,33 +5,42 @@
 #include <memory>
 
 namespace neu {
+    
     class Instance {
     public:
         Instance(Window window, Logger&);
 
-        ~Instance() {}
+        
+        friend VKAPI_ATTR VkBool32 VKAPI_CALL 
+        debugUtilsMessengerCallback( VkDebugUtilsMessageSeverityFlagBitsEXT       messageSeverity,
+                                    VkDebugUtilsMessageTypeFlagsEXT              messageTypes,
+                                    VkDebugUtilsMessengerCallbackDataEXT const * pCallbackData,
+                                    void * pUserData );
     private:
         Logger &logger_;
+        Window &window_;
+        VkSurfaceKHR surface;
 
         vk::raii::Context context_;
         std::shared_ptr<vk::raii::Instance> instance_;
+        std::shared_ptr<vk::raii::PhysicalDevice> physicalDevice_;
 
-        bool checkLayers(std::vector<vk::LayerProperties>&);
-        std::shared_ptr<vk::raii::Instance> setupInstance(vk::ApplicationInfo);
-        const std::vector<const char *> validationLayers = {"VK_LAYER_KHRONOS_validation"};
-        const std::vector<const char *> deviceExtensions = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
+        bool checkLayers();
+        bool checkExtensions();
+        bool setupInstance();
+        void RegisterDebugUtilsMessenger();
+        bool pickPhysicalDevice();
+
+        const std::vector<const char *> validationLayers = {
+            "VK_LAYER_KHRONOS_validation"
+            };
+        const std::vector<const char *> deviceExtensions = {
+            VK_KHR_SWAPCHAIN_EXTENSION_NAME
+            };
         const std::vector<const char *> instanceExtensions = {
             VK_KHR_SURFACE_EXTENSION_NAME
 #if defined( VK_USE_PLATFORM_ANDROID_KHR )
             ,VK_KHR_ANDROID_SURFACE_EXTENSION_NAME
-#elif defined( VK_USE_PLATFORM_IOS_MVK )
-            ,VK_MVK_IOS_SURFACE_EXTENSION_NAME
-#elif defined( VK_USE_PLATFORM_MACOS_MVK )
-            ,VK_MVK_MACOS_SURFACE_EXTENSION_NAME
-#elif defined( VK_USE_PLATFORM_MIR_KHR )
-            ,VK_KHR_MIR_SURFACE_EXTENSION_NAME
-#elif defined( VK_USE_PLATFORM_VI_NN )
-            ,VK_NN_VI_SURFACE_EXTENSION_NAME
 #elif defined( VK_USE_PLATFORM_WAYLAND_KHR )
             ,VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME
 #elif defined( VK_USE_PLATFORM_WIN32_KHR )

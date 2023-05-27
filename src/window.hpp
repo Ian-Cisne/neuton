@@ -14,7 +14,7 @@ namespace neu {
 
         bool shouldClose() { return glfwWindowShouldClose(window);}
         vk::Extent2D getExtent() { return {static_cast<uint32_t>(width), static_cast<uint32_t>(height)}; }
-        void createWindowSurface(vk::raii::Instance instance, VkSurfaceKHR *surface);
+        void createWindowSurface(vk::raii::Instance &instance, VkSurfaceKHR *surface);
         
     private:
         void initWindow();
@@ -24,6 +24,9 @@ namespace neu {
 
         Logger& logger_;
         GLFWwindow * window;
+        
+        vk::raii::SurfaceKHR surface = nullptr;
         std::string windowName;
     };
+    
 }

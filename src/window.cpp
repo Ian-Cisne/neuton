@@ -17,7 +17,7 @@ namespace neu {
     glfwDestroyWindow(window);
     glfwTerminate();
   }
-  void Window::createWindowSurface(vk::raii::Instance instance, VkSurfaceKHR *surface) {
+  void Window::createWindowSurface(vk::raii::Instance &instance, VkSurfaceKHR *surface) {
     if(glfwCreateWindowSurface(*instance, window, nullptr, surface) != VK_SUCCESS) {
       throw std::runtime_error("Failed to create window surface!\n");
     }
