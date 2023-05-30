@@ -20,11 +20,12 @@ namespace neu {
         Logger &logger_;
         Window &window_;
         
-
+        //DO NOT CHANGE OBJECTS ORDER
         vk::raii::Context context_;
         vk::raii::Instance instance_ = nullptr;
         vk::raii::PhysicalDevice physicalDevice_ = nullptr;
         vk::raii::SurfaceKHR surface_ = nullptr;
+        vk::raii::Device device_ = nullptr;
 
         bool checkLayers();
         bool checkExtensions();

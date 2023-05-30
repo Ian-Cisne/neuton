@@ -211,5 +211,9 @@ namespace neu {
             logger_ << LogLevel::warn << "Queue families with present capabilities were not found.\n";
         }
         
-    }   
+        float queuePriority = 0.0f;
+        vk::DeviceQueueCreateInfo deviceQueueCreateInfo( vk::DeviceQueueCreateFlags(), indices.graphics.value(), 1, &queuePriority );
+        vk::DeviceCreateInfo deviceCreateInfo( vk::DeviceCreateFlags(), deviceQueueCreateInfo, {}, deviceExtensions, nullptr, nullptr );
+        device_ = vk::raii::Device( physicalDevice_, deviceCreateInfo );
+    }
 }
