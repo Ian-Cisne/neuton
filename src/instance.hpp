@@ -8,8 +8,8 @@ namespace neu {
     
     class Instance {
     public:
-        Instance(Window window, Logger&);
-
+        Instance(Window&, Logger&);
+        ~Instance();
         
         friend VKAPI_ATTR VkBool32 VKAPI_CALL 
         debugUtilsMessengerCallback( VkDebugUtilsMessageSeverityFlagBitsEXT       messageSeverity,
@@ -19,25 +19,27 @@ namespace neu {
     private:
         Logger &logger_;
         Window &window_;
-        VkSurfaceKHR surface;
+        
 
         vk::raii::Context context_;
-        std::shared_ptr<vk::raii::Instance> instance_;
-        std::shared_ptr<vk::raii::PhysicalDevice> physicalDevice_;
+        vk::raii::Instance instance_ = nullptr;
+        vk::raii::PhysicalDevice physicalDevice_ = nullptr;
+        vk::raii::SurfaceKHR surface_ = nullptr;
 
         bool checkLayers();
         bool checkExtensions();
-        bool setupInstance();
+        void setupInstance();
         void RegisterDebugUtilsMessenger();
-        bool pickPhysicalDevice();
-
-        const std::vector<const char *> validationLayers = {
+        void pickPhysicalDevice();
+        void createDevice();
+        
+        std::vector<const char *> validationLayers = {
             "VK_LAYER_KHRONOS_validation"
             };
-        const std::vector<const char *> deviceExtensions = {
+        std::vector<const char *> deviceExtensions = {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME
             };
-        const std::vector<const char *> instanceExtensions = {
+        std::vector<const char *> instanceExtensions = {
             VK_KHR_SURFACE_EXTENSION_NAME
 #if defined( VK_USE_PLATFORM_ANDROID_KHR )
             ,VK_KHR_ANDROID_SURFACE_EXTENSION_NAME

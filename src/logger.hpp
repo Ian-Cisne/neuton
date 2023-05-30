@@ -24,7 +24,7 @@ namespace neu {
 
         Logger (std::ostream&);
         Logger (std::ostream&, std::string);
-        
+        ~Logger ();
         
         friend Logger& operator<<(Logger&, LogLevel);
         friend Logger& operator<<(Logger&, char const*);

@@ -3,11 +3,16 @@
 
 
 #include <chrono>
-
+#include <format>
 namespace neu {
 
     Logger::Logger(std::ostream &stream): stream_{stream} {}
     Logger::Logger(std::ostream &stream, std::string outPath): stream_{stream}, logfile_{outPath, std::ofstream::ate} {}
+
+    Logger::~Logger() {
+        stream_ <<  "\033[0m";
+    }
+
     //ANSI color escapes
     const std::vector<std::string> Logger::prefixes_ (
         {
@@ -23,17 +28,21 @@ namespace neu {
     Logger& operator<<(Logger& a, LogLevel level) {
 #ifdef NEU_LOG
         a.level_ = level;
+        a.stream_ << a.prefixes_[level] << std::format("[{:%T}]: ",std::chrono::system_clock::now()) ;
+
+        if (a.logfile_.is_open()) {
+            a.logfile_ << std::format("[{:%T}]: ",std::chrono::system_clock::now());
+        }
 #endif
         return a;
     }
     
     Logger& operator<<(Logger& a , char const* t) {
 #ifdef NEU_LOG
-        a.stream_ << a.prefixes_[a.level_] + std::format("[{:%T}]: ",std::chrono::system_clock::now()) 
-             + t;;
+        a.stream_ << t;;
 
         if (a.logfile_.is_open()) {
-            a.logfile_ << std::format("[{:%T}]: ",std::chrono::system_clock::now());
+            a.logfile_ << t;
         }
 #endif
         return a;
@@ -41,11 +50,10 @@ namespace neu {
     
     Logger& operator<<(Logger& a , std::string const t) {
 #ifdef NEU_LOG
-        a.stream_ << a.prefixes_[a.level_] +  std::format("[{:%T}]: ",std::chrono::system_clock::now()) 
-            + t;
+        a.stream_ << t;
 
         if (a.logfile_.is_open()) {
-            a.logfile_ << std::format("[{:%T}]: ",std::chrono::system_clock::now()) + t;
+            a.logfile_ << t;
         }
 #endif
         return a;
@@ -53,10 +61,10 @@ namespace neu {
 
     Logger& operator<<(Logger& a , int const t) {
 #ifdef NEU_LOG
-        a.stream_ << a.prefixes_[a.level_] + std::format("[{:%T}]: ",std::chrono::system_clock::now()) << t;
+        a.stream_ << t;
 
         if (a.logfile_.is_open()) {
-            a.logfile_ << std::format("[{:%T}]: ",std::chrono::system_clock::now());
+            a.logfile_ << t;
         }
 #endif
         return a;

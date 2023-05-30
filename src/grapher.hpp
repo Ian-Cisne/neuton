@@ -1,6 +1,7 @@
-
+#pragma once
 #include "instance.hpp"
 #include "logger.hpp"
+#include "utils.hpp"
 
 namespace neu {
     class Grapher {

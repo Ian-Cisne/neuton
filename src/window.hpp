@@ -1,10 +1,7 @@
-
+#pragma once
 #include "logger.hpp"
 
-#include <vulkan/vulkan_core.h>
-#include <vulkan/vulkan_raii.hpp>
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
+#include "utils.hpp"
 
 namespace neu {
     class Window {
@@ -13,8 +10,11 @@ namespace neu {
         ~Window();
 
         bool shouldClose() { return glfwWindowShouldClose(window);}
+        bool getKey(glfwKey key) {return glfwGetKey(window, key); } 
         vk::Extent2D getExtent() { return {static_cast<uint32_t>(width), static_cast<uint32_t>(height)}; }
-        void createWindowSurface(vk::raii::Instance &instance, VkSurfaceKHR *surface);
+        vk::raii::SurfaceKHR createWindowSurface(vk::raii::Instance const &instance);
+        Window(const neu::Window&) = delete;
+        std::vector<const char*> getRequiredExtensions();
         
     private:
         void initWindow();
@@ -25,7 +25,6 @@ namespace neu {
         Logger& logger_;
         GLFWwindow * window;
         
-        vk::raii::SurfaceKHR surface = nullptr;
         std::string windowName;
     };
     
