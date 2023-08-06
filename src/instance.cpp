@@ -75,6 +75,8 @@ namespace neu {
     
         logger_ << LogLevel::success << "Surface created." << "\n";
 
+        logger_ << LogLevel::info << "Creating logical device..." << "\n";
+
     }
 
     Instance::~Instance() {
@@ -172,7 +174,7 @@ namespace neu {
     };
 
     void Instance::createDevice() {
-        logger_ << LogLevel::info << "Creating device...\n";
+        logger_ << LogLevel::info << "Creating logical device...\n";
 
         logger_ << LogLevel::info << "Picking queue families...\n";
         
@@ -202,7 +204,7 @@ namespace neu {
         if (!indices.graphics.has_value()) {
             logger_ << LogLevel::warn << "Queue families with graphics capabilities were not found.\n";
         }
-
+        
         if (!indices.compute.has_value()) {
             logger_ << LogLevel::warn << "Queue families with compute capabilities were not found.\n";
         }
